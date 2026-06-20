@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ReserveModal from "@/components/ReserveModal";
+import MobileNav from "@/components/MobileNav";
 
 const links = [
   { href: "/", label: "Home" },
@@ -45,9 +46,10 @@ export default function Nav() {
             ))}
           </ul>
 
-          {/* Reserve CTA */}
+          {/* Reserve CTA + Mobile menu toggle */}
           <div className="flex items-center" style={{ gap: "var(--brew-space-3)" }}>
             <ReserveModal />
+            <MobileNav />
           </div>
         </nav>
       </div>

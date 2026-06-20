@@ -20,6 +20,8 @@ export default function ReserveModal() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   // Ref for the first focusable element inside the modal
   const firstFocusRef = useRef<HTMLInputElement>(null);
+  // Ref for the stale-setTimeout fix (Fix 4)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function open() {
     setIsOpen(true);
@@ -27,17 +29,45 @@ export default function ReserveModal() {
   }
 
   function close() {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
     setIsOpen(false);
     setForm({ name: "", partySize: 2, date: "", time: "" });
     setFormState("idle");
   }
 
-  // Finding 1: Escape key closes the modal
+  // Fix 1: Escape closes modal; Tab key is trapped within modal focusable elements
   useEffect(() => {
     if (!isOpen) return;
+
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") {
+        close();
+        return;
+      }
+      if (e.key === "Tab") {
+        const modal = document.getElementById("reserve-modal-title")?.closest("[role='dialog']");
+        if (!modal) return;
+        const focusable = Array.from(
+          modal.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => !el.hasAttribute("disabled"));
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
+
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
@@ -62,8 +92,8 @@ export default function ReserveModal() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormState("submitting");
-    // Simulate async submission (no backend)
-    setTimeout(() => setFormState("success"), 800);
+    // Simulate async submission (no backend); store ID so close() can cancel it
+    timerRef.current = setTimeout(() => setFormState("success"), 800);
   }
 
   return (
@@ -243,7 +273,7 @@ export default function ReserveModal() {
                         className="brew-input"
                         value={form.date}
                         onChange={handleChange}
-                        min={new Date().toISOString().split("T")[0]}
+                        min={new Date().toLocaleDateString("en-CA")}
                       />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--brew-space-2)" }}>

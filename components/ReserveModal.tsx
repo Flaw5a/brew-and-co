@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import type { Reservation } from "@/lib/types";
 
@@ -16,6 +16,11 @@ export default function ReserveModal() {
     time: "",
   });
 
+  // Ref for the modal container (used for focus trap restore)
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  // Ref for the first focusable element inside the modal
+  const firstFocusRef = useRef<HTMLInputElement>(null);
+
   function open() {
     setIsOpen(true);
     setFormState("idle");
@@ -26,6 +31,25 @@ export default function ReserveModal() {
     setForm({ name: "", partySize: 2, date: "", time: "" });
     setFormState("idle");
   }
+
+  // Finding 1: Escape key closes the modal
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") close();
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  // Finding 2: Move focus into modal on open; restore to trigger on close
+  useEffect(() => {
+    if (isOpen) {
+      firstFocusRef.current?.focus();
+    } else {
+      triggerRef.current?.focus();
+    }
+  }, [isOpen]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target;
@@ -46,6 +70,7 @@ export default function ReserveModal() {
     <>
       {/* Trigger button */}
       <button
+        ref={triggerRef}
         type="button"
         className="btn btn-primary"
         onClick={open}
@@ -161,6 +186,7 @@ export default function ReserveModal() {
                       Your name
                     </label>
                     <input
+                      ref={firstFocusRef}
                       id="reserve-name"
                       name="name"
                       type="text"

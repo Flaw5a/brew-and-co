@@ -11,6 +11,7 @@ export default function ReserveModal() {
   const [formState, setFormState] = useState<FormState>("idle");
   const [form, setForm] = useState<Reservation>({
     name: "",
+    email: "",
     partySize: 2,
     date: "",
     time: "",
@@ -27,7 +28,7 @@ export default function ReserveModal() {
 
   function close() {
     setIsOpen(false);
-    setForm({ name: "", partySize: 2, date: "", time: "" });
+    setForm({ name: "", email: "", partySize: 2, date: "", time: "" });
     setFormState("idle");
   }
 
@@ -228,6 +229,27 @@ export default function ReserveModal() {
                       className="brew-input"
                       placeholder="First and last name"
                       value={form.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "var(--brew-space-2)" }}>
+                    <label
+                      htmlFor="reserve-email"
+                      style={{ fontSize: "var(--brew-body-sm)", fontWeight: 500, color: "var(--brew-espresso)" }}
+                    >
+                      Email address
+                    </label>
+                    <input
+                      id="reserve-email"
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      className="brew-input"
+                      placeholder="you@example.com"
+                      value={form.email}
                       onChange={handleChange}
                     />
                   </div>

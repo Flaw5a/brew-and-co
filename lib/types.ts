@@ -19,6 +19,7 @@ export interface BrewEvent {
 
 export interface Reservation {
   name: string;
+  email: string;
   partySize: number;
   date: string;
   time: string;

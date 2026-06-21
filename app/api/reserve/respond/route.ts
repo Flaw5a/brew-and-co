@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     .replace(/>/g, "&gt;");
 
   const { error } = await resend.emails.send({
-    from: "Brewing Coal <onboarding@resend.dev>",
+    from: process.env.RESEND_FROM_EMAIL ?? "Brewing Coal <onboarding@resend.dev>",
     to: reservation.email,
     subject,
     html: `

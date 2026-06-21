@@ -20,19 +20,12 @@ export default function ReserveModal() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   // Ref for the first focusable element inside the modal
   const firstFocusRef = useRef<HTMLInputElement>(null);
-  // Ref for the stale-setTimeout fix (Fix 4)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   function open() {
     setIsOpen(true);
     setFormState("idle");
   }
 
   function close() {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
     setIsOpen(false);
     setForm({ name: "", partySize: 2, date: "", time: "" });
     setFormState("idle");
@@ -89,11 +82,21 @@ export default function ReserveModal() {
     }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormState("submitting");
-    // Simulate async submission (no backend); store ID so close() can cancel it
-    timerRef.current = setTimeout(() => setFormState("success"), 800);
+    try {
+      const res = await fetch("/api/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setFormState("success");
+    } catch {
+      setFormState("idle");
+      alert("Sorry, something went wrong. Please try again.");
+    }
   }
 
   return (

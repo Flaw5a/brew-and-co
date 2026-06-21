@@ -1,0 +1,21 @@
+id,category,name,description,price,badge
+1,Espresso,Espresso,Single shot of our house-blend. Bright, clean finish.,2.50,House Blend
+2,Espresso,Double Espresso,Two ristretto pulls — full-bodied with a long caramel finish.,3.20,
+3,Espresso,Macchiato,Espresso with a single dash of steamed milk foam.,3.00,
+4,Espresso,Cortado,Equal parts espresso and warm whole milk. Balanced and smooth.,3.50,Popular
+5,Drinks,Flat White,Double ristretto shots with velvety microfoam poured to the rim.,4.20,Popular
+6,Drinks,Cappuccino,Classic thirds — espresso, steamed milk, and a generous foam cap.,4.00,
+7,Drinks,Oat Milk Latte,Smooth espresso with steamed oat milk. Naturally sweet.,4.50,House Favourite
+8,Drinks,Americano,Espresso lengthened with hot water. Clean and easy drinking.,3.20,
+9,Cold Drinks,Iced Latte,Two espresso shots over ice with cold whole milk.,4.80,Popular
+10,Cold Drinks,Cold Brew,18-hour steeped house blend served over ice. Smooth and low-acid.,5.00,House Favourite
+11,Cold Drinks,Iced Matcha Latte,Japanese ceremonial matcha whisked with oat milk over ice.,5.20,
+12,Cold Drinks,Sparkling Lemonade,Cold-pressed lemon juice with sparkling water and a hint of mint.,3.80,
+13,Pastries,Butter Croissant,Freshly baked all-butter pastry. Flaky outside soft inside.,3.20,Popular
+14,Pastries,Pain au Chocolat,Two layers of dark Valrhona chocolate in buttery laminated dough.,3.50,
+15,Pastries,Banana Bread,Moist loaf with walnuts and a dusting of dark sugar. Warming spice.,3.80,House Favourite
+16,Pastries,Almond Danish,Open pastry filled with almond frangipane and flaked almonds.,3.80,
+17,Sandwiches,Sourdough BLT,Smoked streaky bacon gem lettuce beef tomato and house aioli on sourdough.,7.50,Popular
+18,Sandwiches,Avocado Toast,Smashed avocado chilli flakes lemon zest and a poached egg on toasted sourdough.,8.50,House Favourite
+19,Sandwiches,Toasted Mature Cheddar,Mature cheddar and grain mustard on thick-cut white bloomer. Served warm.,6.50,
+20,Sandwiches,Chicken Pesto Wrap,Grilled chicken breast sun-dried tomato pesto rocket and parmesan in a spinach wrap.,8.00,

@@ -4,15 +4,25 @@ import { NextResponse } from "next/server";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
-  const { name, partySize, date, time } = await request.json();
+  const { name, email, partySize, date, time } = await request.json();
 
-  if (!name || !partySize || !date || !time) {
+  if (!name || !email || !partySize || !date || !time) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
+  const origin = new URL(request.url).origin;
+  const encodedData = Buffer.from(
+    JSON.stringify({ name, email, partySize, date, time })
+  ).toString("base64url");
+
+  const acceptUrl = `${origin}/reservations/respond?action=accept&data=${encodedData}`;
+  const rejectUrl = `${origin}/reservations/respond?action=reject&data=${encodedData}`;
+
+  const btnBase = "display:inline-block;padding:10px 24px;border-radius:8px;font-weight:600;text-decoration:none;font-size:15px;";
+
   const { error } = await resend.emails.send({
     from: "Brewing Coal <onboarding@resend.dev>",
-    to: "andrew.flaws@city-holdings.co.uk",
+    to: "andys00@live.co.uk",
     subject: `New reservation request — ${name}, party of ${partySize}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1108;">
@@ -25,6 +35,10 @@ export async function POST(request: Request) {
             <td style="padding: 8px 0; font-weight: 600;">${name}</td>
           </tr>
           <tr>
+            <td style="padding: 8px 0; color: #888;">Email</td>
+            <td style="padding: 8px 0; font-weight: 600;">${email}</td>
+          </tr>
+          <tr>
             <td style="padding: 8px 0; color: #888;">Party size</td>
             <td style="padding: 8px 0; font-weight: 600;">${partySize} ${Number(partySize) === 1 ? "person" : "people"}</td>
           </tr>
@@ -35,6 +49,21 @@ export async function POST(request: Request) {
           <tr>
             <td style="padding: 8px 0; color: #888;">Time</td>
             <td style="padding: 8px 0; font-weight: 600;">${time}</td>
+          </tr>
+        </table>
+        <hr style="border: none; border-top: 1px solid #E2D9CC; margin: 24px 0;" />
+        <table style="border-collapse: collapse;">
+          <tr>
+            <td style="padding-right: 12px;">
+              <a href="${acceptUrl}" style="${btnBase}background:#1D5C45;color:#fff;">
+                ✓ Accept
+              </a>
+            </td>
+            <td>
+              <a href="${rejectUrl}" style="${btnBase}background:#c0392b;color:#fff;">
+                ✗ Reject
+              </a>
+            </td>
           </tr>
         </table>
         <hr style="border: none; border-top: 1px solid #E2D9CC; margin: 24px 0;" />

@@ -15,10 +15,12 @@ function defaultMessage(action: Action, r: Reservation): string {
 export default function RespondForm({
   action,
   data,
+  sig,
   reservation,
 }: {
   action: Action;
   data: string;
+  sig: string;
   reservation: Reservation;
 }) {
   const [message, setMessage] = useState(() => defaultMessage(action, reservation));
@@ -31,7 +33,7 @@ export default function RespondForm({
       const res = await fetch("/api/reserve/respond", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, data, message }),
+        body: JSON.stringify({ action, data, message, sig }),
       });
       if (!res.ok) throw new Error("failed");
       setStatus("sent");

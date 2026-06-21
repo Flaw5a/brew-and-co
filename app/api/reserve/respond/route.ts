@@ -1,23 +1,36 @@
+import { createHmac } from "crypto";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import type { Reservation } from "@/lib/types";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function sign(data: string): string {
+  return createHmac("sha256", process.env.RESERVATION_SIGNING_SECRET ?? "")
+    .update(data)
+    .digest("hex")
+    .slice(0, 16);
+}
+
 export async function POST(request: Request) {
   const body = await request.json();
-  const { action, data, message } = body as {
+  const { action, data, message, sig } = body as {
     action: string;
     data: string;
     message: string;
+    sig: string;
   };
 
-  if (!action || !data || !message) {
+  if (!action || !data || !message || !sig) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
   if (action !== "accept" && action !== "reject") {
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+  }
+
+  if (sign(data) !== sig) {
+    return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
   }
 
   let reservation: Reservation;
@@ -26,6 +39,13 @@ export async function POST(request: Request) {
       Buffer.from(data, "base64url").toString("utf-8")
     ) as Reservation;
   } catch {
+    return NextResponse.json({ error: "Invalid reservation data" }, { status: 400 });
+  }
+
+  if (
+    typeof reservation.email !== "string" || !reservation.email ||
+    typeof reservation.name !== "string" || !reservation.name
+  ) {
     return NextResponse.json({ error: "Invalid reservation data" }, { status: 400 });
   }
 

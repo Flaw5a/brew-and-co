@@ -4,11 +4,11 @@ import type { Reservation } from "@/lib/types";
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ action?: string; data?: string }>;
+  searchParams: Promise<{ action?: string; data?: string; sig?: string }>;
 }) {
-  const { action, data } = await searchParams;
+  const { action, data, sig } = await searchParams;
 
-  if (!action || !data || (action !== "accept" && action !== "reject")) {
+  if (!action || !data || !sig || (action !== "accept" && action !== "reject")) {
     return (
       <main style={{ padding: "2rem", maxWidth: "480px", margin: "4rem auto", fontFamily: "sans-serif" }}>
         <h1>Invalid link</h1>
@@ -35,6 +35,7 @@ export default async function Page({
     <RespondForm
       action={action as "accept" | "reject"}
       data={data}
+      sig={sig}
       reservation={reservation}
     />
   );

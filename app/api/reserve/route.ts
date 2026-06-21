@@ -1,7 +1,19 @@
+import { createHmac } from "crypto";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+function sign(data: string): string {
+  return createHmac("sha256", process.env.RESERVATION_SIGNING_SECRET ?? "")
+    .update(data)
+    .digest("hex")
+    .slice(0, 16);
+}
+
+function esc(s: string): string {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 export async function POST(request: Request) {
   const { name, email, partySize, date, time } = await request.json();
@@ -15,15 +27,16 @@ export async function POST(request: Request) {
     JSON.stringify({ name, email, partySize, date, time })
   ).toString("base64url");
 
-  const acceptUrl = `${origin}/reservations/respond?action=accept&data=${encodedData}`;
-  const rejectUrl = `${origin}/reservations/respond?action=reject&data=${encodedData}`;
+  const sig = sign(encodedData);
+  const acceptUrl = `${origin}/reservations/respond?action=accept&data=${encodedData}&sig=${sig}`;
+  const rejectUrl = `${origin}/reservations/respond?action=reject&data=${encodedData}&sig=${sig}`;
 
   const btnBase = "display:inline-block;padding:10px 24px;border-radius:8px;font-weight:600;text-decoration:none;font-size:15px;";
 
   const { error } = await resend.emails.send({
     from: "Brewing Coal <onboarding@resend.dev>",
     to: "andys00@live.co.uk",
-    subject: `New reservation request — ${name}, party of ${partySize}`,
+    subject: `New reservation request — ${esc(name)}, party of ${esc(partySize)}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1108;">
         <h2 style="color: #1D5C45; margin-bottom: 4px;">New Reservation Request</h2>
@@ -32,23 +45,23 @@ export async function POST(request: Request) {
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
             <td style="padding: 8px 0; color: #888; width: 120px;">Name</td>
-            <td style="padding: 8px 0; font-weight: 600;">${name}</td>
+            <td style="padding: 8px 0; font-weight: 600;">${esc(name)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #888;">Email</td>
-            <td style="padding: 8px 0; font-weight: 600;">${email}</td>
+            <td style="padding: 8px 0; font-weight: 600;">${esc(email)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #888;">Party size</td>
-            <td style="padding: 8px 0; font-weight: 600;">${partySize} ${Number(partySize) === 1 ? "person" : "people"}</td>
+            <td style="padding: 8px 0; font-weight: 600;">${esc(partySize)} ${Number(partySize) === 1 ? "person" : "people"}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #888;">Date</td>
-            <td style="padding: 8px 0; font-weight: 600;">${date}</td>
+            <td style="padding: 8px 0; font-weight: 600;">${esc(date)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #888;">Time</td>
-            <td style="padding: 8px 0; font-weight: 600;">${time}</td>
+            <td style="padding: 8px 0; font-weight: 600;">${esc(time)}</td>
           </tr>
         </table>
         <hr style="border: none; border-top: 1px solid #E2D9CC; margin: 24px 0;" />

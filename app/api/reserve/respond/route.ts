@@ -60,8 +60,8 @@ export async function POST(request: Request) {
     .replace(/>/g, "&gt;");
 
   const { error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL ?? "Brewing Coal <onboarding@resend.dev>",
-    to: reservation.email,
+    from: "Brewing Coal <onboarding@resend.dev>",
+    to: "andys00@live.co.uk",
     subject,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1108;">

@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   const btnBase = "display:inline-block;padding:10px 24px;border-radius:8px;font-weight:600;text-decoration:none;font-size:15px;";
 
   const { error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL ?? "Brewing Coal <onboarding@resend.dev>",
+    from: "Brewing Coal <onboarding@resend.dev>",
     to: "andys00@live.co.uk",
     subject: `New reservation request — ${esc(name)}, party of ${esc(partySize)}`,
     html: `

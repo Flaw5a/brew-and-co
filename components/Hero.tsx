@@ -3,7 +3,7 @@ import ReserveModal from "@/components/ReserveModal";
 import Link from "next/link";
 
 const HERO_IMAGE =
-  "https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=1920";
+  "https://images.pexels.com/photos/930402/pexels-photo-930402.jpeg?auto=compress&cs=tinysrgb&w=1920";
 
 export default function Hero() {
   return (

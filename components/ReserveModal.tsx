@@ -11,6 +11,7 @@ export default function ReserveModal() {
   const [formState, setFormState] = useState<FormState>("idle");
   const [form, setForm] = useState<Reservation>({
     name: "",
+    email: "",
     partySize: 2,
     date: "",
     time: "",
@@ -20,21 +21,14 @@ export default function ReserveModal() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   // Ref for the first focusable element inside the modal
   const firstFocusRef = useRef<HTMLInputElement>(null);
-  // Ref for the stale-setTimeout fix (Fix 4)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   function open() {
     setIsOpen(true);
     setFormState("idle");
   }
 
   function close() {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
     setIsOpen(false);
-    setForm({ name: "", partySize: 2, date: "", time: "" });
+    setForm({ name: "", email: "", partySize: 2, date: "", time: "" });
     setFormState("idle");
   }
 
@@ -89,11 +83,21 @@ export default function ReserveModal() {
     }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormState("submitting");
-    // Simulate async submission (no backend); store ID so close() can cancel it
-    timerRef.current = setTimeout(() => setFormState("success"), 800);
+    try {
+      const res = await fetch("/api/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setFormState("success");
+    } catch {
+      setFormState("idle");
+      alert("Sorry, something went wrong. Please try again.");
+    }
   }
 
   return (
@@ -225,6 +229,27 @@ export default function ReserveModal() {
                       className="brew-input"
                       placeholder="First and last name"
                       value={form.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "var(--brew-space-2)" }}>
+                    <label
+                      htmlFor="reserve-email"
+                      style={{ fontSize: "var(--brew-body-sm)", fontWeight: 500, color: "var(--brew-espresso)" }}
+                    >
+                      Email address
+                    </label>
+                    <input
+                      id="reserve-email"
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      className="brew-input"
+                      placeholder="you@example.com"
+                      value={form.email}
                       onChange={handleChange}
                     />
                   </div>

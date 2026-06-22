@@ -30,9 +30,9 @@ export const popularItems = menuItems.filter(
 );
 
 export const categoryImages: Record<string, string> = {
-  Espresso:      "https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800",
-  Drinks:        "https://images.pexels.com/photos/350478/pexels-photo-350478.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "Cold Drinks": "https://images.pexels.com/photos/1187317/pexels-photo-1187317.jpeg?auto=compress&cs=tinysrgb&w=800",
-  Pastries:      "https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=800",
-  Sandwiches:    "https://images.pexels.com/photos/1600711/pexels-photo-1600711.jpeg?auto=compress&cs=tinysrgb&w=800",
+  Espresso:      "https://images.pexels.com/photos/324028/pexels-photo-324028.jpeg?auto=compress&cs=tinysrgb&w=800",
+  Drinks:        "https://images.pexels.com/photos/30707443/pexels-photo-30707443.jpeg?auto=compress&cs=tinysrgb&w=800",
+  "Cold Drinks": "https://images.pexels.com/photos/11100423/pexels-photo-11100423.jpeg?auto=compress&cs=tinysrgb&w=800",
+  Pastries:      "https://images.pexels.com/photos/30666847/pexels-photo-30666847.jpeg?auto=compress&cs=tinysrgb&w=800",
+  Sandwiches:    "https://images.pexels.com/photos/7936659/pexels-photo-7936659.jpeg?auto=compress&cs=tinysrgb&w=800",
 };

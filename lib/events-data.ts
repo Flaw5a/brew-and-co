@@ -10,7 +10,7 @@ export const upcomingEvents: BrewEvent[] = [
     description:
       "Pull up a stool, grab a drink, and let the music find you. Local artists take the mic every Friday from 7pm. No cover charge.",
     imageUrl:
-      "https://images.pexels.com/photos/1916821/pexels-photo-1916821.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/15789086/pexels-photo-15789086.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ export const upcomingEvents: BrewEvent[] = [
     description:
       "Join our head roaster for a guided tasting of three single-origin coffees. Learn to identify flavour notes and ask everything you've been curious about. Free, but booking is recommended.",
     imageUrl:
-      "https://images.pexels.com/photos/3094219/pexels-photo-3094219.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/34933330/pexels-photo-34933330.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ export const upcomingEvents: BrewEvent[] = [
     description:
       "Pull up a stool, grab a drink, and let the music find you. Local artists take the mic every Friday from 7pm. No cover charge.",
     imageUrl:
-      "https://images.pexels.com/photos/1916821/pexels-photo-1916821.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/15789086/pexels-photo-15789086.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
     id: 4,
@@ -43,6 +43,6 @@ export const upcomingEvents: BrewEvent[] = [
     description:
       "Join our head roaster for a guided tasting of three single-origin coffees. Learn to identify flavour notes and ask everything you've been curious about. Free, but booking is recommended.",
     imageUrl:
-      "https://images.pexels.com/photos/3094219/pexels-photo-3094219.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/34933330/pexels-photo-34933330.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
